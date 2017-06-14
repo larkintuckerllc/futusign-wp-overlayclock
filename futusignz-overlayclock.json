@@ -1,0 +1,21 @@
+{
+    "name" : "futusign Overlay Clock",
+    "slug" : "futusignz-overlayclock",
+    "download_url" : "http://futusign-wordpress.s3-website-us-east-1.amazonaws.com/futusignz-overlayclock-0-1-0.zip",
+    "version" : "0.1.0",
+    "author" : "John Tucker",
+    "sections" : {
+        "description" : "Add futusign Overlay Clock feature",
+        "installation": "Upload and activate the <code>futusignz-overlayclock</code> plugin via the plugin admin page",
+        "changelog" : "<p><b>0.1.0</b></p><p>Initial release</p>"
+    },
+    "homepage": "https://www.futusign.com",
+    "requires": "4.3",
+    "tested": "4.7",
+    "author_homepage": "https://github.com/larkintuckerllc",
+    "last_updated": "2017-06-14 00:00:00",
+    "upgrade_notice": "Initial Release",
+    "banners": {
+      "low": "http://futusign-wordpress.s3-website-us-east-1.amazonaws.com/banner-772x250.jpg"
+    }
+}
