@@ -2,6 +2,8 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+header( 'Content-Type: text/html' );
+header( 'Cache-Control: no-cache, no-store, must-revalidate');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,47 +24,51 @@ if ( ! defined( 'WPINC' ) ) {
       padding-right: 20px;
       padding-top: 10px;
       padding-bottom: 10px;
-      border-radius: 10px;
-      background-color: black;
+      background-color: rgba(0,0,0,0.7);
       color: white;
       font-size: 42px;
       font-weight: bold;
     }
     .clock--upper-left {
-      top: 10%;
-      left: 10%;
+      top: 0px;
+      left: 0px;
     }
     .clock--upper-middle {
       transform: translateX(-50%);
-      top: 10%;
+      top: 0px;
       left: 50%;
     }
     .clock--upper-right {
-      top: 10%;
-      right: 10%;
+      top: 0px;
+      right: 0px;
     }
     .clock--middle-left {
       transform: translateY(-50%);
       top: 50%;
-      left: 10%;
+      left: 0px;
+    }
+    .clock--middle-middle {
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
     }
     .clock--middle-right {
       transform: translateY(-50%);
       top: 50%;
-      right: 10%;
+      right: 0px;
     }
     .clock--lower-left {
-      bottom: 10%;
-      left: 10%;
+      bottom: 0px;
+      left: 0px;
     }
     .clock--lower-middle {
       transform: translateX(-50%);
-      bottom: 10%;
+      bottom: 0px;
       left: 50%;
     }
     .clock--lower-right {
-      bottom: 10%;
-      right: 10%;
+      bottom: 0px;
+      right: 0px;
     }
   </style>
 </head>
@@ -107,12 +113,29 @@ if ( ! defined( 'WPINC' ) ) {
         case 'upper-middle':
         case 'upper-right':
         case 'middle-left':
+        case 'middle-middle':
         case 'middle-right':
         case 'lower-left':
         case 'lower-middle':
         case 'lower-right':
           clockEl.className = 'clock--' + parsed.position;
           break;
+				case 'upper':
+          clockEl.className = 'clock--upper-middle';
+					break;
+				case 'middle-row':
+				case 'middle-column':
+          clockEl.className = 'clock--middle-middle';
+					break;
+				case 'lower':
+          clockEl.className = 'clock--lower-middle';
+					break;
+				case 'left':
+          clockEl.className = 'clock--middle-left';
+					break;
+				case 'right':
+          clockEl.className = 'clock--middle-right';
+					break;
         default:
           clockEl.className = 'clock--upper-left';
       }
