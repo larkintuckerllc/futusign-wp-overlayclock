@@ -169,6 +169,8 @@ class Futusign_OverlayClock {
 	 */
 	private function define_admin_hooks() {
 		$plugin_admin = new Futusign_OverlayClock_Admin();
+		$this->loader->add_action('admin_init', $plugin_admin, 'admin_init');
+		$this->loader->add_action('admin_menu', $plugin_admin, 'admin_menu');
 	}
 	/**
 	 * Register all of the hooks related to the public-facing functionality

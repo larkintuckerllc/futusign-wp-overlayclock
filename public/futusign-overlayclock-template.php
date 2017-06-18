@@ -2,6 +2,10 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+// SIZE
+$options = get_option( 'futusign_overlayclock_option_name' );
+$size = array_key_exists( 'size', $options ) ? $options['size'] : '10';
+// OUTPUT
 header( 'Content-Type: text/html' );
 header( 'Cache-Control: no-cache, no-store, must-revalidate');
 ?>
@@ -20,13 +24,13 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
     }
     #clock {
       position: absolute;
-      padding-left: 20px;
-      padding-right: 20px;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding-left: <?php echo $size ?>px;
+      padding-right: <?php echo $size ?>px;
+      padding-top: <?php echo strval(intval($size, 10) / 2) ?>px;
+      padding-bottom: <?php echo strval(intval($size, 10) / 2) ?>px;
       background-color: rgba(0,0,0,0.7);
       color: white;
-      font-size: 42px;
+      font-size: <?php echo $size ?>px;
       font-weight: bold;
     }
     .clock--upper-left {
