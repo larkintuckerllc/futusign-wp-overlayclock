@@ -49,6 +49,13 @@ class Futusign_OverlayClock_Admin {
 			'futusign_overlayclock_settings_page',
 			'futusign_overlayclock_style_section'
 		);
+		add_settings_field(
+			'theme',
+			'theme',
+			array ( $this, 'theme' ),
+			'futusign_overlayclock_settings_page',
+			'futusign_overlayclock_style_section'
+		);
 	}
 	/**
 	 * Sanitize inputs
@@ -58,8 +65,12 @@ class Futusign_OverlayClock_Admin {
 	 * @return   array      sanitized input
 	 */
 	public function sanitize_callback($input) {
+		$themes = array('dark', 'light');
 		$newinput = array();
-		$newinput['size'] = trim($input['size']);
+		$size = intval($input['size']);
+		$theme = $input['theme'];
+		$newinput['size'] = $size >= 10 ? strval($size) : '10';
+		$newinput['theme'] = in_array($theme, $themes) ? $theme : 'dark';
 		return $newinput;
 	}
 	/**
@@ -69,7 +80,7 @@ class Futusign_OverlayClock_Admin {
 	 */
 	public function style_section_callback() {
 		?>
-		<p>Blah...</p>
+		<p>Update to style the clock. To force changes to all playing screens update version in futusign settings.</p>
 		<?php
 	}
 	/**
@@ -81,6 +92,22 @@ class Futusign_OverlayClock_Admin {
 		$options = get_option('futusign_overlayclock_option_name');
 		$size = array_key_exists('size',$options) ? $options['size'] : '10';
 		echo "<input type='number' min='10' id='size' name='futusign_overlayclock_option_name[size]'  value='{$size}' /> <b>px</b>";
+	}
+	/**
+	 * theme Input
+	 *
+	 * @since    0.1.0
+	 */
+	public function theme() {
+		$options = get_option('futusign_overlayclock_option_name');
+		$theme = array_key_exists('theme',$options) ? $options['theme'] : 'dark';
+		?>
+		<select id="theme" name="futusign_overlayclock_option_name[theme]">
+			<option value="dark" <?php echo $theme === 'dark' ? 'selected' : '' ?>>dark</option>
+			<option value="light" <?php echo $theme === 'light' ? 'selected' : '' ?>>light</option>
+		</select>
+		<?php
+		// echo "<input id='theme' name='futusign_overlayclock_option_name[theme]'  value='{$theme}' />";
 	}
 	/**
 	 * Add admin menus

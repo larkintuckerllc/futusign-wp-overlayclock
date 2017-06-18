@@ -2,9 +2,10 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-// SIZE
-$options = get_option( 'futusign_overlayclock_option_name' );
-$size = array_key_exists( 'size', $options ) ? $options['size'] : '10';
+// SETTINGS
+$futusign_oc_options = get_option( 'futusign_overlayclock_option_name' );
+$futusign_oc_size = array_key_exists( 'size', $futusign_oc_options ) ? $futusign_oc_options['size'] : '10';
+$futusign_oc_theme = array_key_exists( 'theme', $futusign_oc_options ) ? $futusign_oc_options['theme'] : 'dark';
 // OUTPUT
 header( 'Content-Type: text/html' );
 header( 'Cache-Control: no-cache, no-store, must-revalidate');
@@ -22,63 +23,30 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
     div {
       box-sizing: border-box;
     }
-    #clock {
-      position: absolute;
-      padding-left: <?php echo $size ?>px;
-      padding-right: <?php echo $size ?>px;
-      padding-top: <?php echo strval(intval($size, 10) / 2) ?>px;
-      padding-bottom: <?php echo strval(intval($size, 10) / 2) ?>px;
-      background-color: rgba(0,0,0,0.7);
-      color: white;
-      font-size: <?php echo $size ?>px;
+		#frame {
+			position: fixed;
+			display: flex;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+		}
+    #frame__clock {
+      padding-left: <?php echo $futusign_oc_size ?>px;
+      padding-right: <?php echo $futusign_oc_size ?>px;
+      padding-top: <?php echo strval(intval($futusign_oc_size, 10) / 2) ?>px;
+      padding-bottom: <?php echo strval(intval($futusign_oc_size, 10) / 2) ?>px;
+      background-color: <?php echo $futusign_oc_theme === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'; ?>;
+      color: <?php echo $futusign_oc_theme === 'dark' ? 'white' : 'black'; ?>;
+      font-size: <?php echo $futusign_oc_size ?>px;
       font-weight: bold;
-    }
-    .clock--upper-left {
-      top: 0px;
-      left: 0px;
-    }
-    .clock--upper-middle {
-      transform: translateX(-50%);
-      top: 0px;
-      left: 50%;
-    }
-    .clock--upper-right {
-      top: 0px;
-      right: 0px;
-    }
-    .clock--middle-left {
-      transform: translateY(-50%);
-      top: 50%;
-      left: 0px;
-    }
-    .clock--middle-middle {
-      transform: translate(-50%, -50%);
-      top: 50%;
-      left: 50%;
-    }
-    .clock--middle-right {
-      transform: translateY(-50%);
-      top: 50%;
-      right: 0px;
-    }
-    .clock--lower-left {
-      bottom: 0px;
-      left: 0px;
-    }
-    .clock--lower-middle {
-      transform: translateX(-50%);
-      bottom: 0px;
-      left: 50%;
-    }
-    .clock--lower-right {
-      bottom: 0px;
-      right: 0px;
     }
   </style>
 </head>
 <body>
-  <div id="clock">
-  </div>
+	<div id="frame">
+  	<div id="frame__clock"></div>
+	</div>
   <script>
     var drift = 0;
     var parseQueryString = function() {
@@ -110,39 +78,60 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
       };
     });
     document.addEventListener("DOMContentLoaded", function() {
-      var clockEl = document.getElementById('clock');
+			var frameEl = document.getElementById('frame');
+      var clockEl = document.getElementById('frame__clock');
       var parsed = parseQueryString();
+			let justify;
+			let align;
       switch (parsed.position) {
         case 'upper-left':
+					justify = 'flex-start';
+					align = 'flex-start';
+					break
         case 'upper-middle':
-        case 'upper-right':
-        case 'middle-left':
-        case 'middle-middle':
-        case 'middle-right':
-        case 'lower-left':
-        case 'lower-middle':
-        case 'lower-right':
-          clockEl.className = 'clock--' + parsed.position;
-          break;
 				case 'upper':
-          clockEl.className = 'clock--upper-middle';
-					break;
+					justify = 'center';
+					align = 'flex-start';
+					break
+        case 'upper-right':
+					justify = 'flex-end';
+					align = 'flex-start';
+					break
+        case 'middle-left':
+				case 'left':
+					justify = 'flex-start';
+					align = 'center';
+					break
+        case 'middle-middle':
 				case 'middle-row':
 				case 'middle-column':
-          clockEl.className = 'clock--middle-middle';
-					break;
-				case 'lower':
-          clockEl.className = 'clock--lower-middle';
-					break;
-				case 'left':
-          clockEl.className = 'clock--middle-left';
-					break;
+					justify = 'center';
+					align = 'center';
+					break
+        case 'middle-right':
 				case 'right':
-          clockEl.className = 'clock--middle-right';
-					break;
+					justify = 'flex-end';
+					align = 'center';
+					break
+        case 'lower-left':
+					justify = 'flex-start';
+					align = 'flex-end';
+					break
+        case 'lower-middle':
+				case 'lower':
+					justify = 'center';
+					align = 'flex-end';
+					break
+        case 'lower-right':
+					justify = 'flex-end';
+					align = 'flex-end';
+					break
         default:
-          clockEl.className = 'clock--upper-left';
+					justify = 'center';
+					align = 'center';
       }
+			frameEl.style.justifyContent = justify;
+			frameEl.style.alignItems = align;
       var updateClock = function() {
         var localTime = (new Date()).getTime();
         var now = new Date(localTime - drift);
