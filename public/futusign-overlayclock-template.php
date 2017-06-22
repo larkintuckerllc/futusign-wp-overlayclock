@@ -4,8 +4,8 @@ if ( ! defined( 'WPINC' ) ) {
 }
 // SETTINGS
 $futusign_oc_options = get_option( 'futusign_overlayclock_option_name' );
-$futusign_oc_size = array_key_exists( 'size', $futusign_oc_options ) ? $futusign_oc_options['size'] : '10';
-$futusign_oc_theme = array_key_exists( 'theme', $futusign_oc_options ) ? $futusign_oc_options['theme'] : 'dark';
+$futusign_oc_size = $futusign_oc_options !== false && array_key_exists( 'size', $futusign_oc_options ) ? $futusign_oc_options['size'] : '10';
+$futusign_oc_theme = $futusign_oc_options !== false && array_key_exists( 'theme', $futusign_oc_options ) ? $futusign_oc_options['theme'] : 'dark';
 // OUTPUT
 header( 'Content-Type: text/html' );
 header( 'Cache-Control: no-cache, no-store, must-revalidate');

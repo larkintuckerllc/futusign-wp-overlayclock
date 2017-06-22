@@ -90,7 +90,7 @@ class Futusign_OverlayClock_Admin {
 	 */
 	public function size() {
 		$options = get_option('futusign_overlayclock_option_name');
-		$size = array_key_exists('size',$options) ? $options['size'] : '10';
+		$size = $options !== false && array_key_exists( 'size', $options ) ? $options['size'] : '10';
 		echo "<input type='number' min='10' id='size' name='futusign_overlayclock_option_name[size]'  value='{$size}' /> <b>px</b>";
 	}
 	/**
@@ -100,7 +100,7 @@ class Futusign_OverlayClock_Admin {
 	 */
 	public function theme() {
 		$options = get_option('futusign_overlayclock_option_name');
-		$theme = array_key_exists('theme',$options) ? $options['theme'] : 'dark';
+		$theme = $options !== false && array_key_exists( 'theme', $options ) ? $options['theme'] : 'dark';
 		?>
 		<select id="theme" name="futusign_overlayclock_option_name[theme]">
 			<option value="dark" <?php echo $theme === 'dark' ? 'selected' : '' ?>>dark</option>
