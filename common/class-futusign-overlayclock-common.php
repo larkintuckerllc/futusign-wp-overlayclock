@@ -26,4 +26,12 @@ class Futusign_OverlayClock_Common {
 	 */
 	public function __construct() {
 	}
+	/**
+   * Add rewrite rules
+   *
+   * @since    0.4.0
+   */
+   public function add_rewrite_rules() {
+	   add_rewrite_rule( '^fs-oc-endpoint/?', 'index.php?futusign_oc_endpoint=1', 'top' );
+	 }
 }

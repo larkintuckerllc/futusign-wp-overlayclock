@@ -27,6 +27,9 @@ class Futusign_OverlayClock_Activator {
 	 * @since    0.1.0
 	 */
 	public static function activate() {
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'common/class-futusign-overlayclock-common.php';
+		$plugin_common = new Futusign_OverlayClock_Common();
+		$plugin_common->add_rewrite_rules();
 		wp_insert_post(
 			array(
 				'post_type' => 'futusign_ov_widget',
@@ -34,5 +37,6 @@ class Futusign_OverlayClock_Activator {
 				'post_title' => 'Clock',
 			)
 		);
+		flush_rewrite_rules();
 	}
 }

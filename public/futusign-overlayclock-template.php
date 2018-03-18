@@ -11,7 +11,7 @@ header( 'Content-Type: text/html' );
 header( 'Cache-Control: no-cache, no-store, must-revalidate');
 ?>
 <!DOCTYPE html>
-<html lang="en" manifest="<?php echo plugins_url( 'index.appcache?version=2018031801', __FILE__ ); ?>">
+<html lang="en" manifest="<?php echo plugins_url( 'index.appcache', __FILE__ ); ?>">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>futusign Overlay Clock</title>
@@ -36,7 +36,7 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
       padding-right: <?php echo $futusign_oc_size ?>px;
       padding-top: <?php echo strval(intval($futusign_oc_size, 10) / 2) ?>px;
       padding-bottom: <?php echo strval(intval($futusign_oc_size, 10) / 2) ?>px;
-      background-color: <?php echo $futusign_oc_theme === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'; ?>;
+      background-color: <?php echo $futusign_oc_theme === 'dark' ? 'rgb(0,0,0)' : 'rgb(255,255,255)'; ?>;
       color: <?php echo $futusign_oc_theme === 'dark' ? 'white' : 'black'; ?>;
       font-size: <?php echo $futusign_oc_size ?>px;
       font-weight: bold;
