@@ -2,10 +2,6 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-// SETTINGS
-$futusign_oc_options = get_option( 'futusign_overlayclock_option_name' );
-$futusign_oc_size = $futusign_oc_options !== false && array_key_exists( 'size', $futusign_oc_options ) ? $futusign_oc_options['size'] : '10';
-$futusign_oc_theme = $futusign_oc_options !== false && array_key_exists( 'theme', $futusign_oc_options ) ? $futusign_oc_options['theme'] : 'dark';
 // OUTPUT
 header( 'Content-Type: text/html' );
 header( 'Cache-Control: no-cache, no-store, must-revalidate');
@@ -32,13 +28,7 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
 			height: 100%;
 		}
     #frame__clock {
-      padding-left: <?php echo $futusign_oc_size ?>px;
-      padding-right: <?php echo $futusign_oc_size ?>px;
-      padding-top: <?php echo strval(intval($futusign_oc_size, 10) / 2) ?>px;
-      padding-bottom: <?php echo strval(intval($futusign_oc_size, 10) / 2) ?>px;
-      background-color: <?php echo $futusign_oc_theme === 'dark' ? 'rgb(0,0,0)' : 'rgb(255,255,255)'; ?>;
-      color: <?php echo $futusign_oc_theme === 'dark' ? 'white' : 'black'; ?>;
-      font-size: <?php echo $futusign_oc_size ?>px;
+      display: none;
       font-weight: bold;
     }
   </style>
@@ -48,6 +38,7 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
   	<div id="frame__clock"></div>
 	</div>
   <script>
+    var ENDPOINT = '/fs-oc-endpoint';
     var drift = 0;
     var parseQueryString = function() {
       var parsed = {};
@@ -81,8 +72,8 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
 			var frameEl = document.getElementById('frame');
       var clockEl = document.getElementById('frame__clock');
       var parsed = parseQueryString();
-			let justify;
-			let align;
+			var justify;
+			var align;
       switch (parsed.position) {
         case 'upper-left':
 					justify = 'flex-start';
@@ -132,7 +123,35 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
       }
 			frameEl.style.justifyContent = justify;
 			frameEl.style.alignItems = align;
-      var updateClock = function() {
+      // ASSUME CHROME
+      fetch(ENDPOINT)
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(json) {
+          styleClock(parseInt(json.size), json.theme);
+          localStorage.setItem('futusign_oc_size', json.size);
+          localStorage.setItem('futusign_oc_theme', json.theme);
+        })
+        .catch(function() {
+          var size = localStorage.getItem('futusign_oc_size');
+          var theme = localStorage.getItem('futusign_oc_theme');
+          size = size !== null ? size : '10';
+          theme = theme !== null ? theme : 'dark';
+          styleClock(parseInt(size), theme);
+         }) ;
+      function styleClock(size, theme) {
+        clockEl.style.paddingLeft = size.toString() + 'px';
+        clockEl.style.paddingRight = size.toString() + 'px';
+        clockEl.style.paddingTop = (size / 2).toString() + 'px';
+        clockEl.style.paddingBottom = (size / 2).toString() + 'px';
+        clockEl.style.backgroundColor = theme === 'dark' ? 'rgb(0,0,0)' : 'rgb(255,255,255)';
+        clockEl.style.color = theme === 'dark' ? 'white' : 'black';
+        clockEl.style.fontSize = size.toString() + 'px';
+        clockEl.style.display = 'block';
+      }
+      updateClock();
+      function updateClock() {
         var localTime = (new Date()).getTime();
         var now = new Date(localTime - drift);
         var h = now.getHours();
@@ -144,14 +163,13 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
           h + ":" + m + ' ' + p;
         setTimeout(updateClock, 1000);
       }
-      updateClock();
-      var updateTime = function() {
+      updateTime();
+      function updateTime() {
         window.parent.postMessage({
           type: 'MSG_TIME',
         }, '*');
         setTimeout(updateTime, 1000 * 60 * 60);
       }
-      updateTime();
     });
   </script>
 </body>

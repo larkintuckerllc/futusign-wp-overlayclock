@@ -96,7 +96,7 @@ class Futusign_OverlayClock {
 	 */
 	public function __construct() {
 		$this->plugin_name = 'futusign-overlayclock';
-		$this->version = '0.3.0';
+		$this->version = '0.4.0';
 		$this->load_dependencies();
 		$this->set_locale();
 		if (Futusign_OverlayClock::is_plugin_active('all')) {
@@ -159,6 +159,7 @@ class Futusign_OverlayClock {
 	 */
 	private function define_common_hooks() {
 		$plugin_common = new Futusign_OverlayClock_Common();
+		$this->loader->add_action('init', $plugin_common, 'add_rewrite_rules');
 	}
 	/**
 	 * Register all of the hooks related to the admin area functionality
@@ -182,6 +183,8 @@ class Futusign_OverlayClock {
 	private function define_public_hooks() {
 		$plugin_public = new Futusign_OverlayClock_Public();
 		$this->loader->add_action('single_template', $plugin_public, 'single_template');
+		$this->loader->add_action('query_vars', $plugin_public, 'query_vars');
+		$this->loader->add_action('parse_request', $plugin_public, 'parse_request');
 	}
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.

@@ -40,4 +40,30 @@ class Futusign_OverlayClock_Public {
 		}
 		return $single;
 	}
+	/**
+	 * Add to query variables
+	 *
+	 * @since    0.4.0
+	 * @param    array      $query_vars     query variables
+	 * @return   array      query variables
+	 */
+	public function query_vars( $query_vars ) {
+    $query_vars[] = 'futusign_oc_endpoint';
+		return $query_vars;
+	}
+	/**
+	 * Define futusign-monitor endpoint
+	 *
+	 * @since    0.4.0
+	 * @param    array      $query     query
+	 */
+	public function parse_request( $query ) {
+		$query_vars = $query->query_vars;
+		if ( array_key_exists( 'futusign_oc_endpoint', $query_vars ) ) {
+			require_once plugin_dir_path( __FILE__ ) . 'partials/futusign-oc-endpoint.php';
+			futusign_oc_endpoint();
+			exit();
+		}
+		return;
+	}
 }

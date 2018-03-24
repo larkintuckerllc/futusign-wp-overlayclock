@@ -29,7 +29,7 @@ class Futusign_OverlayClock_Inactive {
 	/**
 	 * Display missing plugin dependency notices.
 	 *
-	 * @since    0.3.0
+	 * @since    0.1.0
 	 */
 	public function missing_plugins_notice() {
 		if ( ! Futusign_OverlayClock::is_plugin_active( 'futusign' ) ) {
