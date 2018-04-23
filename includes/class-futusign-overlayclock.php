@@ -96,7 +96,7 @@ class Futusign_OverlayClock {
 	 */
 	public function __construct() {
 		$this->plugin_name = 'futusign-overlayclock';
-		$this->version = '0.4.1';
+		$this->version = '0.4.2';
 		$this->load_dependencies();
 		$this->set_locale();
 		if (Futusign_OverlayClock::is_plugin_active('all')) {
@@ -224,7 +224,7 @@ class Futusign_OverlayClock {
 		$current_version = $this->version;
 		if ( get_site_option( 'futusign_oc_db_version' ) !== $current_version ) {
 			flush_rewrite_rules();
-			update_option( 'futusign_db_version', $current_version );
+			update_option( 'futusign_oc_db_version', $current_version );
 		}
 	}
 }
