@@ -9,7 +9,7 @@
  * Plugin Name:      futusign Overlay Clock
  * Plugin URI:       https://www.futusign.com
  * Description:      Add futusign Overlay Clock feature
- * Version:          0.4.0
+ * Version:          0.4.1
  * Author:           John Tucker
  * Author URI:       https://github.com/larkintuckerllc
  * License:          Custom

@@ -96,7 +96,7 @@ class Futusign_OverlayClock {
 	 */
 	public function __construct() {
 		$this->plugin_name = 'futusign-overlayclock';
-		$this->version = '0.4.0';
+		$this->version = '0.4.1';
 		$this->load_dependencies();
 		$this->set_locale();
 		if (Futusign_OverlayClock::is_plugin_active('all')) {
@@ -160,6 +160,8 @@ class Futusign_OverlayClock {
 	private function define_common_hooks() {
 		$plugin_common = new Futusign_OverlayClock_Common();
 		$this->loader->add_action('init', $plugin_common, 'add_rewrite_rules');
+		// UPDATE DB CHECK
+		$this->loader->add_action('init', $this, 'update_db_check');
 	}
 	/**
 	 * Register all of the hooks related to the admin area functionality
@@ -212,5 +214,17 @@ class Futusign_OverlayClock {
 	 */
 	public function get_loader() {
 		return $this->loader;
+	}
+	/**
+	 * On update, update database
+	 *
+	 * @since    0.4.1
+	 */
+	public function update_db_check() {
+		$current_version = $this->version;
+		if ( get_site_option( 'futusign_oc_db_version' ) !== $current_version ) {
+			flush_rewrite_rules();
+			update_option( 'futusign_db_version', $current_version );
+		}
 	}
 }
