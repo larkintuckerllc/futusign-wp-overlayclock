@@ -4,7 +4,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en" manifest="<?php echo plugins_url( 'index.appcache', __FILE__ ); ?>">
+<html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>futusign Overlay Clock</title>
@@ -35,7 +35,6 @@ if ( ! defined( 'WPINC' ) ) {
   	<div id="frame__clock"></div>
 	</div>
   <script>
-    const CACHE_INTERVAL = 60 * 60;
     const SITE_URL = '<?php echo trailingslashit( site_url() ); ?>';
     let drift = 0;
     const fetchEndpoint = () => new Promise((resolve, reject) => {
@@ -89,17 +88,6 @@ if ( ! defined( 'WPINC' ) ) {
       }
       return parsed;
     };
-    // CHECK APP CACHE
-    const appCache = window.applicationCache;
-    const check = () => {
-      appCache.update();
-    };
-    const handleUpdateReady = () => {
-      window.location.reload();
-    };
-    window.setInterval(check, CACHE_INTERVAL * 1000);
-    appCache.addEventListener('updateready', handleUpdateReady);
-
     window.addEventListener('message', function(message) {
       switch (message.data.type) {
         case 'MSG_TIME':

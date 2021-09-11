@@ -1,20 +1,20 @@
 {
     "name" : "futusign Overlay Clock",
     "slug" : "futusignz-overlayclock",
-    "download_url" : "http://futusign-wordpress.s3-website-us-east-1.amazonaws.com/futusignz-overlayclock-0-4-4.zip",
-    "version" : "0.4.4",
+    "download_url" : "http://futusign-wordpress.s3-website-us-east-1.amazonaws.com/futusignz-overlayclock-0-4-5.zip",
+    "version" : "0.4.5",
     "author" : "John Tucker",
     "sections" : {
         "description" : "Add futusign Overlay Clock feature",
         "installation": "Upload and activate the <code>futusignz-overlayclock</code> plugin via the plugin admin page",
-        "changelog" : "<p><b>0.4.4</b></p><p>Fixed for multisite</p><p><b>0.4.3</b></p><p>Forcing update for testing</p><p><b>0.4.2</b></p><p>Bug Fix: Clock not sizing</p><p><b>0.4.1</b></p><p>Refresh URLs on upgrade</p><p><b>0.4.0</b></p><p>Settings via AJAX</p><p><b>0.3.0</b></p><p>Color fix catchup; HTML5 application cache</p><p><b>0.1.0</b></p><p>Initial release</p>"
+        "changelog" : "<p><b>0.4.5</b></p><p>Disable application cache.</p><p><b>0.4.4</b></p><p>Fixed for multisite</p><p><b>0.4.3</b></p><p>Forcing update for testing</p><p><b>0.4.2</b></p><p>Bug Fix: Clock not sizing</p><p><b>0.4.1</b></p><p>Refresh URLs on upgrade</p><p><b>0.4.0</b></p><p>Settings via AJAX</p><p><b>0.3.0</b></p><p>Color fix catchup; HTML5 application cache</p><p><b>0.1.0</b></p><p>Initial release</p>"
     },
     "homepage": "https://www.futusign.com",
     "requires": "4.3",
     "tested": "4.9",
     "author_homepage": "https://github.com/larkintuckerllc",
-    "last_updated": "2018-04-29 00:00:00",
-    "upgrade_notice": "Fixed for multisite",
+    "last_updated": "2021-09-11 00:00:00",
+    "upgrade_notice": "Disable application cache",
     "banners": {
       "low": "http://futusign-wordpress.s3-website-us-east-1.amazonaws.com/banner-772x250.jpg"
     }
