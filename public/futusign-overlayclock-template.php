@@ -2,9 +2,6 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-// OUTPUT
-header( 'Content-Type: text/html' );
-header( 'Cache-Control: no-cache, no-store, must-revalidate');
 ?>
 <!DOCTYPE html>
 <html lang="en" manifest="<?php echo plugins_url( 'index.appcache', __FILE__ ); ?>">
@@ -38,8 +35,42 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
   	<div id="frame__clock"></div>
 	</div>
   <script>
-    var ENDPOINT = '/fs-oc-endpoint';
-    var drift = 0;
+    const CACHE_INTERVAL = 60 * 60;
+    const SITE_URL = '<?php echo trailingslashit( site_url() ); ?>';
+    let drift = 0;
+    const fetchEndpoint = () => new Promise((resolve, reject) => {
+      let cleanUp = () => {}; // WILL REASSIGN
+      const xmlhttp = new XMLHttpRequest();
+      const handleLoad = () => {
+        const status = xmlhttp.status;
+        if (status !== 200) {
+          reject({ message: status.toString() });
+          cleanUp();
+          return;
+        }
+        const link = xmlhttp.getResponseHeader('Link');
+        const isPretty = link.indexOf('?') === -1;
+        const endpoint = isPretty ?
+         `${SITE_URL}fs-oc-endpoint` :
+         `${SITE_URL}?futusign_oc_endpoint=1`;
+        resolve(endpoint);
+        cleanUp();
+      };
+      const handleError = () => {
+        reject({ message: '500' });
+        cleanUp();
+      };
+      cleanUp = () => {
+        xmlhttp.removeEventListener('load', handleLoad);
+        xmlhttp.removeEventListener('error', handleError);
+        xmlhttp.removeEventListener('abort', handleError);
+      };
+      xmlhttp.addEventListener('load', handleLoad);
+      xmlhttp.addEventListener('error', handleError);
+      xmlhttp.addEventListener('abort', handleError);
+      xmlhttp.open('HEAD', SITE_URL, true);
+      xmlhttp.send();
+    });
     var parseQueryString = function() {
       var parsed = {};
       var qs = window.location.search;
@@ -58,6 +89,17 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
       }
       return parsed;
     };
+    // CHECK APP CACHE
+    const appCache = window.applicationCache;
+    const check = () => {
+      appCache.update();
+    };
+    const handleUpdateReady = () => {
+      window.location.reload();
+    };
+    window.setInterval(check, CACHE_INTERVAL * 1000);
+    appCache.addEventListener('updateready', handleUpdateReady);
+
     window.addEventListener('message', function(message) {
       switch (message.data.type) {
         case 'MSG_TIME':
@@ -124,16 +166,15 @@ header( 'Cache-Control: no-cache, no-store, must-revalidate');
 			frameEl.style.justifyContent = justify;
 			frameEl.style.alignItems = align;
       // ASSUME CHROME
-      fetch(ENDPOINT)
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(json) {
+      fetchEndpoint()
+        .then(fetch)
+        .then(response => response.json())
+        .then((json) => {
           styleClock(parseInt(json.size), json.theme);
           localStorage.setItem('futusign_oc_size', json.size);
           localStorage.setItem('futusign_oc_theme', json.theme);
         })
-        .catch(function() {
+        .catch(() => {
           var size = localStorage.getItem('futusign_oc_size');
           var theme = localStorage.getItem('futusign_oc_theme');
           size = size !== null ? size : '10';
